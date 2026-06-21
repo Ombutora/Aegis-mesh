@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.aegismesh">
+
+    <!-- ============================================== -->
+    <!-- 1. BLUETOOTH & MESH NETWORKING PERMISSIONS     -->
+    <!-- ============================================== -->
+    <!-- Legacy Bluetooth (Android 11 and below) -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    
+    <!-- Modern Bluetooth (Android 12+ requires explicit granular permissions) -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
+    <!-- ============================================== -->
+    <!-- 2. WI-FI DIRECT / TCP SOCKET PERMISSIONS       -->
+    <!-- ============================================== -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Android 13+ requires this for Wi-Fi Direct peer discovery -->
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" />
+
+    <!-- ============================================== -->
+    <!-- 3. LOCATION PERMISSIONS                        -->
+    <!-- ============================================== -->
+    <!-- Android heavily enforces location permissions because scanning for 
+         BLE/Wi-Fi tags can theoretically be used to track a user's location -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- ============================================== -->
+    <!-- 4. HARDWARE & BACKGROUND EXECUTION             -->
+    <!-- ============================================== -->
+    <!-- Needed to provide haptic feedback when SOS triggers -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- Keeps the CPU awake while the phone screen is off during an emergency -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Allows our mesh router to run as a persistent background service -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <!-- Declare that Bluetooth LE is a hardware requirement -->
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
+    <uses-feature android:name="android.hardware.wifi.direct" android:required="true" />
+    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Aegis Mesh"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AegisMesh">
+
+        <!-- Our main UI Screen -->
+        <activity
+            android:name=".activities.EmergencyActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Our Background Networking Service -->
+        <service
+            android:name=".services.MeshService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice" />
+            
+    </application>
+
+</manifest>
