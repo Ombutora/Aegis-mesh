@@ -18,12 +18,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Handles HTTP network communication with the Aegis Mesh FastAPI backend. All
- * endpoint paths are derived dynamically from a base URL configured in
- * BuildConfig.BASE_URL.
+ * Handles HTTP network communication with the Aegis Mesh FastAPI backend.
+ * All endpoint paths are derived dynamically from a base URL configured in BuildConfig.BASE_URL.
  */
 public class ApiClient {
-
     private static final String TAG = "ApiClient";
     private static final int TIMEOUT_MS = 10000; // 10 seconds timeout
 
@@ -32,15 +30,45 @@ public class ApiClient {
 
     // Derived Endpoints
     public static final String ENDPOINT_EMERGENCY = combinePath(BASE_URL, "api/v1/emergency/dispatch");
-    public static final String ENDPOINT_LOGIN = combinePath(BASE_URL, "login");
-    public static final String ENDPOINT_REGISTER = combinePath(BASE_URL, "register");
+    // Fixed to include the /api/v1/auth/ prefix per the project audit - the previous
+    // "login"/"register" paths didn't match the backend's actual route prefix.
+    public static final String ENDPOINT_LOGIN = combinePath(BASE_URL, "api/v1/auth/login");
+    public static final String ENDPOINT_REGISTER = combinePath(BASE_URL, "api/v1/auth/register");
+    // NOTE: hospitals/triage prefixes are unconfirmed against the real backend routes -
+    // left as-is since only the auth prefix mismatch was verified.
     public static final String ENDPOINT_HOSPITALS = combinePath(BASE_URL, "hospitals");
     public static final String ENDPOINT_TRIAGE = combinePath(BASE_URL, "triage");
 
+    // Mocked service singletons - see AuthService/UserService javadoc for what's mocked and why.
+    private static AuthService authService;
+    private static UserService userService;
+    private static String sessionToken;
+
+    public static synchronized AuthService getAuthService() {
+        if (authService == null) {
+            authService = new AuthService();
+        }
+        return authService;
+    }
+
+    public static synchronized UserService getUserService() {
+        if (userService == null) {
+            userService = new UserService();
+        }
+        return userService;
+    }
+
+    public static void setSessionToken(String token) {
+        sessionToken = token;
+    }
+
+    public static String getSessionToken() {
+        return sessionToken;
+    }
+
     /**
      * Resolves the BASE_URL dynamically via reflection from BuildConfig.
-     * Fallback to default emulator IP (10.0.2.2) if not defined or
-     * ifBuildConfig is missing at compile time.
+     * Fallback to default emulator IP (10.0.2.2) if not defined or ifBuildConfig is missing at compile time.
      */
     private static String getBaseUrl() {
         try {
@@ -56,8 +84,7 @@ public class ApiClient {
     }
 
     /**
-     * Safely combines base URL and endpoint path, resolving slash formatting
-     * issues.
+     * Safely combines base URL and endpoint path, resolving slash formatting issues.
      */
     private static String combinePath(String base, String path) {
         if (base.endsWith("/")) {
@@ -68,16 +95,14 @@ public class ApiClient {
     }
 
     /**
-     * Synchronously sends emergency data to the FastAPI backend. MUST be run on
-     * a background thread.
+     * Synchronously sends emergency data to the FastAPI backend.
+     * MUST be run on a background thread.
      *
-     * @param emergency The emergency model instance containing location/trigger
-     * data.
+     * @param emergency The emergency model instance containing location/trigger data.
      * @param victim The user model containing medical history for AI Triage.
-     * @return a {@link DispatchResult} containing the AI-generated first-aid
-     * instructions and the hospital the emergency was routed to.
-     * @throws Exception If connection fails, request times out, or server
-     * returns non-2xx code.
+     * @return a {@link DispatchResult} containing the AI-generated first-aid instructions
+     *         and the hospital the emergency was routed to.
+     * @throws Exception If connection fails, request times out, or server returns non-2xx code.
      */
     public static DispatchResult sendEmergency(Emergency emergency, User victim) throws Exception {
         if (emergency == null || victim == null) {
@@ -118,7 +143,7 @@ public class ApiClient {
                         response.append(responseLine.trim());
                     }
                 }
-
+                
                 String rawResponse = response.toString();
                 Log.d(TAG, "Raw Backend Response: " + rawResponse);
 
@@ -127,7 +152,7 @@ public class ApiClient {
                 // ==========================================
                 JSONObject jsonResponse = new JSONObject(rawResponse);
                 JSONObject dispatchData = jsonResponse.getJSONObject("dispatch_data");
-
+                
                 String aiInstructions = dispatchData.getString("ai_first_aid_instructions");
                 Hospital bestHospital = Hospital.fromBackendJson(dispatchData.getJSONObject("recommended_facility"));
 

@@ -27,6 +27,9 @@ import java.util.regex.Pattern;
  * This activity only handles step 1. Step 2 is offered afterwards from
  * {@link ProfileActivity} so new users aren't blocked from using the app
  * while they complete deeper verification.
+ *
+ * NOTE: ApiClient.getAuthService() is currently a MOCK - the backend has no
+ * real OTP endpoints yet. See AuthService's javadoc.
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -59,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(AuthResult.OtpRequest response) {
                 runOnUiThread(() -> {
                     setLoading(false);
-                    otpRequestId = response.requestId;
+                    otpRequestId = response.getRequestId();
                     binding.otpGroup.setVisibility(View.VISIBLE);
                     binding.textStatus.setText(getString(R.string.otp_sent, phoneNumber));
                 });
@@ -93,8 +96,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(AuthResult auth) {
                 runOnUiThread(() -> {
                     setLoading(false);
-                    ApiClient.setSessionToken(auth.accessToken);
-                    onAuthenticated(auth.isNewUser);
+                    ApiClient.setSessionToken(auth.getAccessToken());
+                    onAuthenticated(auth.isNewUser());
                 });
             }
 

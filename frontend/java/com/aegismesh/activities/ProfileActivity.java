@@ -14,6 +14,7 @@ import com.aegismesh.models.User;
 import com.aegismesh.models.VerificationLevel;
 import com.aegismesh.network.ApiCallback;
 import com.aegismesh.network.ApiClient;
+import com.aegismesh.session.UserSession;
 
 /**
  * Lets the user view and edit their medical profile, emergency contacts,
@@ -28,6 +29,12 @@ import com.aegismesh.network.ApiClient;
  * phone (required at signup), national ID, and selfie/face match. Higher
  * tiers unlock the "Verified Responder" badge required for volunteer
  * response eligibility.
+ *
+ * NOTE: ApiClient.getUserService() is currently a MOCK - per the project
+ * audit, no backend route reads/writes the users table yet. See
+ * UserService's javadoc. ID/selfie verification (IdVerificationActivity,
+ * SelfieVerificationActivity) aren't built yet either - those buttons show
+ * a "coming soon" message instead.
  */
 public class ProfileActivity extends AppCompatActivity {
 
@@ -75,14 +82,14 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void bindUser(User user) {
-        MedicalProfile profile = user.medicalProfile;
-        binding.inputFullName.setText(user.fullName);
-        binding.inputBloodGroup.setText(profile.bloodGroup);
+        MedicalProfile profile = user.getMedicalProfile();
+        binding.inputFullName.setText(user.getFullName());
+        binding.inputBloodGroup.setText(profile.getBloodGroup());
         binding.inputAllergies.setText(profile.allergiesCsv());
         binding.inputChronicIllnesses.setText(profile.chronicIllnessesCsv());
         binding.inputMedications.setText(profile.currentMedicationsCsv());
 
-        renderVerificationBadges(user.verificationLevel);
+        renderVerificationBadges(user.getVerificationLevel());
     }
 
     private void renderVerificationBadges(VerificationLevel level) {
@@ -123,6 +130,9 @@ public class ProfileActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     setLoading(false);
                     showToast(getString(R.string.profile_saved));
+                    // Makes the saved profile available to SOSService's dispatch
+                    // payload without requiring a re-login.
+                    UserSession.getInstance().setCurrentUser(user);
                     if (isOnboarding) {
                         finish();
                     }
@@ -140,15 +150,14 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void startIdVerification() {
-        // Launches the national ID capture + verification flow. Implementation
-        // lives in a dedicated capture activity/module, invoked here.
-        IdVerificationActivity.start(this);
+        // TODO: IdVerificationActivity isn't built yet - national ID capture
+        // is a real feature (camera capture + verification), not a compile fix.
+        showToast(getString(R.string.feature_coming_soon));
     }
 
     private void startSelfieVerification() {
-        // Launches selfie capture for face-match verification, unlocked only
-        // after national ID verification succeeds.
-        SelfieVerificationActivity.start(this);
+        // TODO: SelfieVerificationActivity isn't built yet - see startIdVerification().
+        showToast(getString(R.string.feature_coming_soon));
     }
 
     private void addEmergencyContactRow() {
