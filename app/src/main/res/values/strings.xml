@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aegis Mesh</string>
+
+    <!-- HomeActivity / MeshService status strings -->
+    <string name="permissions_required_for_mesh">Bluetooth and location permissions are required for mesh networking.</string>
+    <string name="mesh_status_online">Mesh network online</string>
+    <string name="mesh_status_offline_relay">Offline &#8212; relaying through %1$d nearby device(s)</string>
+    <string name="mesh_status_disconnected">Mesh network disconnected</string>
+
+    <!-- EmergencyActivity strings -->
+    <string name="location_shared_exact">Exact location shared with responder</string>
+    <string name="location_shared_approximate">Approximate location shared (within %1$d m)</string>
+    <string name="responder_trust_score">Trust score: %1$.1f &#8226; %2$d completed assists</string>
+    <string name="responder_eta">ETA: %1$d min</string>
+    <string name="hospital_distance_km">%1$.1f km away</string>
+    <string name="dialog_cancel_sos_title">Cancel emergency?</string>
+    <string name="dialog_cancel_sos_message">This will stop the active SOS and notify anyone already responding. Are you sure?</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_dismiss">Dismiss</string>
+
+    <!-- LoginActivity strings -->
+    <string name="error_invalid_phone">Enter a valid phone number</string>
+    <string name="otp_sent">Code sent to %1$s</string>
+    <string name="error_otp_request_failed">Couldn\'t send code. Try again.</string>
+    <string name="error_request_otp_first">Request a code first</string>
+    <string name="error_invalid_otp">Enter the 6-digit code</string>
+    <string name="error_otp_invalid">Invalid or expired code</string>
+
+    <!-- ProfileActivity strings -->
+    <string name="error_load_profile_failed">Couldn\'t load your profile</string>
+    <string name="verified_responder_badge_earned">Verified Responder badge earned</string>
+    <string name="verified_responder_badge_locked">Complete ID + selfie verification to earn the Verified Responder badge</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="profile_saved">Profile saved</string>
+    <string name="error_save_profile_failed">Couldn\'t save your profile</string>
+    <string name="action_finish_setup">Finish Setup</string>
+    <string name="action_save">Save</string>
+    <string name="feature_coming_soon">Coming soon</string>
+
+    <plurals name="mesh_relay_peer_count">
+        <item quantity="one">Relayed via %1$d peer</item>
+        <item quantity="other">Relayed via %1$d peers</item>
+    </plurals>
+</resources>

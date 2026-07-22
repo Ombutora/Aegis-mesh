@@ -1,47 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:layout_height="match_parent">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Emergency Medical Profile"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
+        android:orientation="vertical"
+        android:padding="24dp">
 
-    <EditText
-        android:id="@+id/etFullName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Full Name (Required)" />
+        <EditText
+            android:id="@+id/inputFullName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Full name" />
 
-    <EditText
-        android:id="@+id/etAge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Age"
-        android:inputType="number" />
+        <EditText
+            android:id="@+id/inputBloodGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Blood group"
+            android:layout_marginTop="8dp" />
 
-    <EditText
-        android:id="@+id/etAllergies"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Known Allergies (e.g., Penicillin)" />
+        <EditText
+            android:id="@+id/inputAllergies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Allergies (comma-separated)"
+            android:layout_marginTop="8dp" />
 
-    <EditText
-        android:id="@+id/etConditions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Chronic Conditions (e.g., Asthma)" />
+        <EditText
+            android:id="@+id/inputChronicIllnesses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Chronic illnesses (comma-separated)"
+            android:layout_marginTop="8dp" />
 
-    <Button
-        android:id="@+id/btnSaveProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Save Securely to Device"
-        android:layout_marginTop="24dp"/>
-</LinearLayout>
+        <EditText
+            android:id="@+id/inputMedications"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Current medications (comma-separated)"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Identity Verification"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/badgePhoneVerified"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Phone \u2713"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/badgeIdVerified"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="ID \u2713"
+                android:gravity="center"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/badgeFaceVerified"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Face \u2713"
+                android:gravity="center"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textVerifiedResponderStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/buttonVerifyId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Verify National ID"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/buttonVerifySelfie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Verify Selfie"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Emergency Contacts"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp" />
+
+        <LinearLayout
+            android:id="@+id/emergencyContactsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/buttonAddEmergencyContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="+ Add Contact"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/buttonSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/action_save"
+            android:layout_marginTop="24dp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
+</ScrollView>

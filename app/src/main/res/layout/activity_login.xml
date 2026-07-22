@@ -9,35 +9,60 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Aegis Mesh"
+        android:text="@string/app_name"
         android:textSize="32sp"
         android:textStyle="bold"
-        android:layout_marginBottom="32dp"/>
+        android:layout_marginBottom="32dp" />
 
     <EditText
-        android:id="@+id/etUsername"
+        android:id="@+id/inputPhoneNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Username" />
-
-    <EditText
-        android:id="@+id/etPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:inputType="textPassword" />
+        android:hint="Phone number"
+        android:inputType="phone" />
 
     <Button
-        android:id="@+id/btnLogin"
+        android:id="@+id/buttonSendOtp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:layout_marginTop="16dp"/>
+        android:text="Send Code"
+        android:layout_marginTop="16dp" />
+
+    <LinearLayout
+        android:id="@+id/otpGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_marginTop="24dp">
+
+        <EditText
+            android:id="@+id/inputOtpCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="6-digit code"
+            android:inputType="number"
+            android:maxLength="6" />
+
+        <Button
+            android:id="@+id/buttonVerifyOtp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Verify"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="16dp" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp" />
 </LinearLayout>
