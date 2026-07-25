@@ -1,11 +1,10 @@
 #include <jni.h>
 #include <string>
+#include "ble_mesh.h"
+#include "wifi_direct.h"
 
-// Declare the functions from our other files
 extern void setScreenHoldState(bool isHeld);
 extern bool processAccelerometerData(float x, float y, float z);
-extern void buildSosPacket(uint32_t msg_id, const char* name, const char* condition, uint8_t* output_buffer);
-extern bool processIncomingPacket(const uint8_t* input_buffer, uint8_t* output_buffer_to_forward);
 
 extern "C" {
 
@@ -53,11 +52,6 @@ Java_com_aegismesh_services_MeshService_nativeProcessIncomingPacket(JNIEnv *env,
     
     return nullptr; // Null means do not broadcast
 }
-
-// Declare the functions from wifi_direct.cpp
-extern std::string startProfileServer(int port);
-extern bool sendFullProfile(const char* target_ip, int port, const char* profile_json);
-
 
 // 3. Wi-Fi Direct JNI functions mapping to com.aegismesh.services.MeshService
 JNIEXPORT jstring JNICALL

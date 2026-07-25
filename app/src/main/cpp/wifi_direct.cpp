@@ -15,7 +15,7 @@ const int BUFFER_SIZE = 4096;
 // ==========================================
 // SERVER: Listen for incoming profile requests
 // ==========================================
-extern "C" std::string startProfileServer(int port) {
+std::string startProfileServer(int port) {
     int server_fd, new_socket;
     struct sockaddr_in address;
     int opt = 1;
@@ -78,7 +78,7 @@ extern "C" std::string startProfileServer(int port) {
 // ==========================================
 // CLIENT: Send our full profile to an IP
 // ==========================================
-extern "C" bool sendFullProfile(const char* target_ip, int port, const char* profile_json) {
+bool sendFullProfile(const char* target_ip, int port, const char* profile_json) {
     int sock = 0;
     struct sockaddr_in serv_addr;
 

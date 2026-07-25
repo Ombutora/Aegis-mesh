@@ -29,7 +29,7 @@ bool hasSeenMessage(uint32_t msg_id) {
 }
 
 // Function to construct a new SOS packet (Called when THIS phone triggers SOS)
-extern "C" void buildSosPacket(uint32_t msg_id, const char* name, const char* condition, uint8_t* output_buffer) {
+void buildSosPacket(uint32_t msg_id, const char* name, const char* condition, uint8_t* output_buffer) {
     MeshPayload payload = {0};
     payload.message_id = msg_id;
     payload.hop_count = 0; // 0 hops so far
@@ -45,7 +45,7 @@ extern "C" void buildSosPacket(uint32_t msg_id, const char* name, const char* co
 
 // Function to handle incoming packets from other phones (Multi-hop logic)
 // Returns true if the message should be rebroadcast (forwarded)
-extern "C" bool processIncomingPacket(const uint8_t* input_buffer, uint8_t* output_buffer_to_forward) {
+bool processIncomingPacket(const uint8_t* input_buffer, uint8_t* output_buffer_to_forward) {
     MeshPayload incoming;
     memcpy(&incoming, input_buffer, sizeof(MeshPayload));
 
