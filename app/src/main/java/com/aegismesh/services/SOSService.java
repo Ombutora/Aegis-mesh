@@ -25,10 +25,16 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.aegismesh.database.EmergencyDbHelper;
 import com.aegismesh.models.DispatchResult;
 import com.aegismesh.models.Emergency;
 import com.aegismesh.models.User;
+import com.aegismesh.models.Hospital;
+import com.aegismesh.models.Responder;
+import com.aegismesh.models.TriageMessage;
 import com.aegismesh.network.ApiClient;
 import com.aegismesh.session.UserSession;
 
@@ -48,6 +54,61 @@ import java.util.concurrent.TimeUnit;
 public class SOSService extends Service {
 
     private static final String TAG = "SOSService";
+
+    private static final MutableLiveData<Emergency> activeEmergency = new MutableLiveData<>();
+    private static final MutableLiveData<TriageMessage> triageMessages = new MutableLiveData<>();
+    private static final MutableLiveData<Responder> assignedResponder = new MutableLiveData<>();
+    private static final MutableLiveData<Hospital> recommendedHospital = new MutableLiveData<>();
+
+    public static LiveData<Emergency> getActiveEmergency() {
+        return activeEmergency;
+    }
+
+    public static LiveData<TriageMessage> getTriageMessages() {
+        return triageMessages;
+    }
+
+    public static LiveData<Responder> getAssignedResponder() {
+        return assignedResponder;
+    }
+
+    public static LiveData<Hospital> getRecommendedHospital() {
+        return recommendedHospital;
+    }
+
+    public static void trigger(Context context) {
+        Intent intent = new Intent(context, SOSService.class);
+        intent.setAction(ACTION_TRIGGER_SOS);
+        User currentUser = UserSession.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            intent.putExtra(EXTRA_USER_ID, currentUser.getFullName());
+        }
+        intent.putExtra(EXTRA_TRIGGER_TYPE, MANUAL_TRIGGER);
+        intent.putExtra(EXTRA_EMERGENCY_TYPE, "GENERAL");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
+    }
+
+    public static void cancel(Context context, String emergencyId) {
+        activeEmergency.setValue(null);
+        triageMessages.setValue(null);
+        assignedResponder.setValue(null);
+        recommendedHospital.setValue(null);
+        Intent intent = new Intent(context, SOSService.class);
+        context.stopService(intent);
+    }
+
+    public static void escalate(Context context, String emergencyId) {
+        Emergency current = activeEmergency.getValue();
+        if (current != null) {
+            current.locationConfirmed = true;
+            current.approximateRadiusMeters = 0;
+            activeEmergency.postValue(current);
+        }
+    }
 
     // Intent Actions and Extras
     public static final String ACTION_TRIGGER_SOS = "com.aegismesh.action.TRIGGER_SOS";
@@ -281,6 +342,8 @@ public class SOSService extends Service {
             Log.w(TAG, "No cached User found in UserSession; backend payload will be incomplete.");
         }
 
+        activeEmergency.postValue(emergency);
+
         // Network check
         if (isNetworkAvailable()) {
             sendViaInternet(emergency, victim);
@@ -336,15 +399,28 @@ public class SOSService extends Service {
             Log.i(TAG, "Backend success");
             emergency.setStatus(Emergency.STATUS_DELIVERED);
             dbHelper.insertOrUpdate(emergency);
+            activeEmergency.postValue(emergency);
 
             // Surface the AI first-aid guidance and hospital routing decision.
-            // TODO: broadcast/pass dispatchResult to EmergencyActivity for on-screen display
-            // once that UI is built, rather than relying on the notification text alone.
             String hospitalName = "nearest facility";
-            if (dispatchResult != null && dispatchResult.getRecommendedHospital() != null) {
-                hospitalName = dispatchResult.getRecommendedHospital().getName();
-                Log.i(TAG, "AI first-aid instructions: " + dispatchResult.getAiFirstAidInstructions());
+            if (dispatchResult != null) {
+                if (dispatchResult.getRecommendedHospital() != null) {
+                    hospitalName = dispatchResult.getRecommendedHospital().getName();
+                    recommendedHospital.postValue(dispatchResult.getRecommendedHospital());
+                }
+                if (dispatchResult.getAiFirstAidInstructions() != null) {
+                    triageMessages.postValue(new TriageMessage(dispatchResult.getAiFirstAidInstructions(), System.currentTimeMillis()));
+                }
             }
+
+            // Simulate responder assignment after 3 seconds for demonstration
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                if (activeEmergency.getValue() != null) {
+                    Responder responder = new Responder("Dr. Jane Doe", 4.9, 124, 8, true);
+                    assignedResponder.setValue(responder);
+                }
+            }, 3000);
+
             updateNotification("Emergency Mode Active", "Alert delivered. Routed to " + hospitalName + ".");
             Log.i(TAG, "Emergency completed");
         } else {

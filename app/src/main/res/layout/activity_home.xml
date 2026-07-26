@@ -1,49 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center_vertical">
+    android:background="#0D0D0D"
+    android:padding="24dp">
 
+    <!-- ── Greeting ────────────────────────────────────────── -->
     <TextView
         android:id="@+id/tvGreeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello,"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textColor="#FFFFFF"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp" />
 
+    <!-- ── Mesh status ────────────────────────────────────── -->
+    <TextView
+        android:id="@+id/textMeshStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mesh network connecting…"
+        android:textColor="#888888"
+        android:textSize="13sp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        tools:text="Mesh network online" />
+
+    <!-- ── Profile status ─────────────────────────────────── -->
     <TextView
         android:id="@+id/tvProfileStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Checking profile status..."
-        android:layout_marginBottom="32dp"
-        android:layout_marginTop="8dp"/>
+        android:text="Checking profile status…"
+        android:textColor="#666666"
+        android:textSize="12sp"
+        android:layout_marginBottom="40dp" />
+
+    <!-- ── Spacer so SOS button floats toward center ──────── -->
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- ── Primary SOS button ─────────────────────────────── -->
+    <Button
+        android:id="@+id/buttonSos"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="SEND SOS"
+        android:backgroundTint="#CC0000"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <!-- ── Secondary actions ──────────────────────────────── -->
+    <Button
+        android:id="@+id/buttonProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="My Profile"
+        android:layout_marginBottom="8dp" />
 
     <Button
         android:id="@+id/btnGoToEmergency"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:text="ENTER SOS MODE"
-        android:backgroundTint="#FF0000"
+        android:backgroundTint="#FF4444"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="8dp" />
 
     <Button
         android:id="@+id/btnEditProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Setup Medical Profile"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="8dp" />
 
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Logout"
-        style="?android:attr/buttonBarButtonStyle"/>
+        style="?android:attr/buttonBarButtonStyle"
+        android:textColor="#888888"
+        android:layout_marginBottom="16dp" />
+
 </LinearLayout>

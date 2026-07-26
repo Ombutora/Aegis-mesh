@@ -14,6 +14,7 @@ import com.aegismesh.models.User;
 import com.aegismesh.models.VerificationLevel;
 import com.aegismesh.network.ApiCallback;
 import com.aegismesh.network.ApiClient;
+import com.aegismesh.session.UserSession;
 
 /**
  * Lets the user view and edit their medical profile, emergency contacts,
@@ -75,14 +76,14 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void bindUser(User user) {
-        MedicalProfile profile = user.medicalProfile;
-        binding.inputFullName.setText(user.fullName);
-        binding.inputBloodGroup.setText(profile.bloodGroup);
+        MedicalProfile profile = user.getMedicalProfile();
+        binding.inputFullName.setText(user.getFullName());
+        binding.inputBloodGroup.setText(profile.getBloodGroup());
         binding.inputAllergies.setText(profile.allergiesCsv());
         binding.inputChronicIllnesses.setText(profile.chronicIllnessesCsv());
         binding.inputMedications.setText(profile.currentMedicationsCsv());
 
-        renderVerificationBadges(user.verificationLevel);
+        renderVerificationBadges(user.getVerificationLevel());
     }
 
     private void renderVerificationBadges(VerificationLevel level) {
@@ -123,6 +124,7 @@ public class ProfileActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     setLoading(false);
                     showToast(getString(R.string.profile_saved));
+                    UserSession.getInstance().setCurrentUser(user);
                     if (isOnboarding) {
                         finish();
                     }
@@ -140,15 +142,11 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void startIdVerification() {
-        // Launches the national ID capture + verification flow. Implementation
-        // lives in a dedicated capture activity/module, invoked here.
-        IdVerificationActivity.start(this);
+        showToast(getString(R.string.feature_coming_soon));
     }
 
     private void startSelfieVerification() {
-        // Launches selfie capture for face-match verification, unlocked only
-        // after national ID verification succeeds.
-        SelfieVerificationActivity.start(this);
+        showToast(getString(R.string.feature_coming_soon));
     }
 
     private void addEmergencyContactRow() {

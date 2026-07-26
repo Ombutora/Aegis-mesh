@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(AuthResult.OtpRequest response) {
                 runOnUiThread(() -> {
                     setLoading(false);
-                    otpRequestId = response.requestId;
+                    otpRequestId = response.getRequestId();
                     binding.otpGroup.setVisibility(View.VISIBLE);
                     binding.textStatus.setText(getString(R.string.otp_sent, phoneNumber));
                 });
@@ -93,8 +93,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(AuthResult auth) {
                 runOnUiThread(() -> {
                     setLoading(false);
-                    ApiClient.setSessionToken(auth.accessToken);
-                    onAuthenticated(auth.isNewUser);
+                    ApiClient.setSessionToken(auth.getAccessToken());
+                    onAuthenticated(auth.isNewUser());
                 });
             }
 

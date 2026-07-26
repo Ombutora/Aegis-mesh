@@ -66,16 +66,6 @@ public class EmergencyActivity extends AppCompatActivity {
         binding.buttonCancelSos.setOnClickListener(v -> confirmCancel());
         binding.buttonEscalate.setOnClickListener(v -> escalate());
 
-                // TEMPORARY TEST BUTTON FOR EMULATOR
-        Button btnForceSos = new Button(this);
-        btnForceSos.setText("FORCE TRIGGER SOS (TEST)");
-        btnForceSos.setOnClickListener(v -> {
-            // Manually trigger the callback as if C++ detected 3 shakes
-            onSosTriggered();
-        });
-        // Add it to your layout (Assuming your root layout is a LinearLayout or ConstraintLayout)
-        ((android.view.ViewGroup) findViewById(android.R.id.content)).addView(btnForceSos);
-
         observeActiveEmergency();
     }
 

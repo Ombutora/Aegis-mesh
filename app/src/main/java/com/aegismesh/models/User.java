@@ -11,6 +11,8 @@ public class User implements Serializable {
     private String age;
     private String allergies;
     private String chronicConditions;
+    private MedicalProfile medicalProfile;
+    private VerificationLevel verificationLevel;
 
     public User(String fullName, String age, String allergies, String chronicConditions) {
         this.fullName = fullName;
@@ -23,6 +25,10 @@ public class User implements Serializable {
         return fullName;
     }
 
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public String getAge() {
         return age;
     }
@@ -33,6 +39,22 @@ public class User implements Serializable {
 
     public String getChronicConditions() {
         return chronicConditions;
+    }
+
+    public MedicalProfile getMedicalProfile() {
+        return medicalProfile;
+    }
+
+    public void setMedicalProfile(MedicalProfile medicalProfile) {
+        this.medicalProfile = medicalProfile;
+    }
+
+    public VerificationLevel getVerificationLevel() {
+        return verificationLevel;
+    }
+
+    public void setVerificationLevel(VerificationLevel verificationLevel) {
+        this.verificationLevel = verificationLevel;
     }
 
     /**

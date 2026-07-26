@@ -52,6 +52,14 @@ public class GestureDetector implements SensorEventListener {
         }
     }
 
+    public void start() {
+        startListening();
+    }
+
+    public void stop() {
+        stopListening();
+    }
+
     // Called by the UI (e.g., EmergencyActivity) when the user touches/releases the SOS button
     public void setScreenHeld(boolean isHeld) {
         nativeSetScreenHoldState(isHeld);

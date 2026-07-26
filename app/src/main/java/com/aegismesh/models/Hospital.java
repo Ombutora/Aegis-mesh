@@ -6,11 +6,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Hospital implements Serializable {
-    private String name;
-    private String inventory;
-    private String distance;
-    private double latitude;
-    private double longitude;
+    private static final long serialVersionUID = 1L;
+
+    public String name;
+    public String inventory;
+    public String distance;
+    public double latitude;
+    public double longitude;
+    
+    public String routingReason = "Specialized trauma care unit";
+    public double distanceKm = 0.0;
 
     public Hospital(String name, String inventory, String distance, double latitude, double longitude) {
         this.name = name;
@@ -18,6 +23,13 @@ public class Hospital implements Serializable {
         this.distance = distance;
         this.latitude = latitude;
         this.longitude = longitude;
+        
+        try {
+            String clean = distance.replaceAll("[^0-9.]", "");
+            this.distanceKm = Double.parseDouble(clean);
+        } catch (Exception e) {
+            this.distanceKm = 0.0;
+        }
     }
 
     public String getName() { return name; }
