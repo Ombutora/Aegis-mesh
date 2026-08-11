@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:app="http://schemas.android.com/apk/res-auto">
+    <style name="Theme.AegisMesh" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/aegis_primary</item>
+        <item name="colorPrimaryDark">@color/aegis_primary_dark</item>
+        <item name="colorAccent">@color/aegis_accent</item>
+        <!-- Ensure buttons respect the backgroundTint set in XML -->
+        <item name="materialButtonStyle">@style/Widget.MaterialComponents.Button.UnelevatedButton</item>
+    </style>
+</resources>
